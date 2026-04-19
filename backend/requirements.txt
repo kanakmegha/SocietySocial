@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+supabase
+pydantic
+python-multipart
+websockets
+python-dotenv
+asyncpg
+psycopg2-binary
+PyJWT
+sqlalchemy>=2.0.0
