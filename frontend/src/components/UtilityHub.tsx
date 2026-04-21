@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Phone, Bell, Info, ShieldAlert, Globe, ArrowRight, Gem } from 'lucide-react';
+import { Phone, Bell, Info, ShieldAlert, Globe, ArrowRight, Diamond } from 'lucide-react';
 
 export default function UtilityHub() {
   const [contacts, setContacts] = useState<any[]>([]);
@@ -85,7 +85,7 @@ export default function UtilityHub() {
             <div key={idx} className="premium-card p-12 bg-gray-50/50 backdrop-blur-xl border border-gray-100 rounded-[3.5rem] relative overflow-hidden group hover:border-gold/30 transition-all duration-1000">
               {/* Cinematic Watermark */}
               <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:opacity-10 transition-opacity pointer-events-none">
-                 <Gem size={180} className="text-navy" />
+                 <Diamond size={180} className="text-navy" />
               </div>
               
               <div className="relative z-10">
