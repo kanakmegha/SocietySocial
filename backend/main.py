@@ -149,3 +149,52 @@ async def get_notices():
         {"date": "OCT 12", "title": "Elevator Maintenance", "content": "The main lobby elevator will be out of service from 2 AM to 5 AM for routine maintenance."},
         {"date": "OCT 10", "title": "Pool Cleansing", "content": "Weekly deep cleaning of the community pool has been completed."}
     ]
+
+@app.get("/staff")
+async def get_staff():
+    return [
+        {"id": "s1", "name": "Rajesh Kumar", "role": "Lead Security", "rating": 4.9, "review_count": 142},
+        {"id": "s2", "name": "Amit Singh", "role": "Estate Manager", "rating": 4.8, "review_count": 89},
+        {"id": "s3", "name": "Sunita Verma", "role": "Head Cleaning", "rating": 4.5, "review_count": 56}
+    ]
+
+@app.post("/rate")
+async def submit_rating(request: Request):
+    data = await request.json()
+    print(f"MOCK RATING RECEIVED: {data}")
+    return {"status": "success", "message": "Rating submitted successfully!"}
+
+@app.get("/groups")
+async def get_groups():
+    return [
+        {"id": "g1", "name": "Morning Yoga Seekers", "tag": "fitness", "member_count": 42},
+        {"id": "g2", "name": "Weekend Chess Club", "tag": "hobby", "member_count": 18},
+        {"id": "g3", "name": "Car Pool Hub", "tag": "utility", "member_count": 128}
+    ]
+
+@app.websocket("/ws/events/{event_id}")
+async def event_websocket(websocket: WebSocket, event_id: str):
+    await websocket.accept()
+    # Send initial event data
+    await websocket.send_json({
+        "id": event_id,
+        "title": "Annual Diwali Gala",
+        "date": "2026-11-05T19:00:00",
+        "total_spots": 200,
+        "reserved_spots": 145
+    })
+    
+    try:
+        while True:
+            data = await websocket.receive_text()
+            if data == "rsvp":
+                # Mock handling an RSVP
+                await websocket.send_json({
+                    "id": event_id,
+                    "title": "Annual Diwali Gala",
+                    "date": "2026-11-05T19:00:00",
+                    "total_spots": 200,
+                    "reserved_spots": 146
+                })
+    except WebSocketDisconnect:
+        pass
