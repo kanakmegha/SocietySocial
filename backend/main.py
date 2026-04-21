@@ -85,11 +85,28 @@ async def create_post(
     print(f"DEBUG_HEADERS: {dict(request.headers)}")
     try:
         # Use Supabase Admin client to bypass RLS
-        new_post_data = post.dict()
+        # Convert the Pydantic model directly to JSON-primitive dict to safely serialize UUIDs
+        new_post_data = json.loads(post.json(exclude_unset=True))
         if 'id' in new_post_data: del new_post_data['id']
+        if 'created_at' in new_post_data and new_post_data['created_at'] is None:
+            del new_post_data['created_at']
         
         print(f"DEBUG: Attempting to insert post for user {new_post_data.get('author_id')}")
+        author_id_str = new_post_data.get('author_id')
         
+        # 1. Foreign Key Safety Check - Ensure profile exists
+        profile_res = supabase_admin.table("profiles").select("id").eq("id", author_id_str).execute()
+        
+        if not profile_res.data:
+            print(f"DEBUG: Profile not found for {author_id_str}. Auto-creating default profile.")
+            supabase_admin.table("profiles").insert({
+                "id": author_id_str,
+                "full_name": "New Resident",
+                "role": "resident",
+                "karma_points": 0
+            }).execute()
+        
+        # 2. Insert the post
         res = supabase_admin.table("posts").insert(new_post_data).execute()
         
         if hasattr(res, 'error') and res.error:
@@ -117,3 +134,18 @@ async def get_profile(
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+@app.get("/contacts")
+async def get_contacts():
+    return [
+        {"role": "Security Gate", "number": "+1 (555) 019-8273"},
+        {"role": "Estate Manager", "number": "+1 (555) 012-4829"},
+        {"role": "Plumber (On Call)", "number": "+1 (555) 098-1122"}
+    ]
+
+@app.get("/notices")
+async def get_notices():
+    return [
+        {"date": "OCT 12", "title": "Elevator Maintenance", "content": "The main lobby elevator will be out of service from 2 AM to 5 AM for routine maintenance."},
+        {"date": "OCT 10", "title": "Pool Cleansing", "content": "Weekly deep cleaning of the community pool has been completed."}
+    ]

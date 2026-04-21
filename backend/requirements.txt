@@ -9,3 +9,4 @@ asyncpg
 psycopg2-binary
 PyJWT
 sqlalchemy>=2.0.0
+cryptography
