@@ -8,7 +8,9 @@ load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
-    raise ValueError("DATABASE_URL is not set in environment variables")
+    print("ERROR: DATABASE_URL is not set. Database features will be unavailable.")
+    # Provide a dummy URL to prevent crash on engine creation
+    DATABASE_URL = "postgresql+asyncpg://user:pass@localhost/dummy"
 
 # Ensure DATABASE_URL is in asyncpg format
 if DATABASE_URL.startswith("postgresql://"):

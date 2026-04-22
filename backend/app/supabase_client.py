@@ -26,7 +26,10 @@ if not SUPABASE_SERVICE_ROLE_KEY.startswith("ey"):
 SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET", "").strip()
 
 if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
-    raise ValueError("Missing Supabase configuration in environment")
+    print("CRITICAL ERROR: Missing Supabase configuration in environment. API will fail.")
+    # Set to placeholders to avoid immediate crash on create_client
+    SUPABASE_URL = SUPABASE_URL or "https://placeholder.supabase.co"
+    SUPABASE_SERVICE_ROLE_KEY = SUPABASE_SERVICE_ROLE_KEY or "eyPlaceholder"
 
 # Centralized client instance
 supabase_admin: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
