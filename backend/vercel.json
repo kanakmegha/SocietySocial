@@ -1,5 +1,11 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "main.py" }
+  "version": 2,
+  "functions": {
+    "main.py": {
+      "runtime": "vercel-python@latest"
+    }
+  },
+  "routes": [
+    { "src": "/(.*)", "dest": "main.py" }
   ]
 }
