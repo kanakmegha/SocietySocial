@@ -11,9 +11,11 @@ import asyncio
 import json
 import os
 from datetime import datetime
-from typing import List, Optional
+from mangum import Mangum
+
 # Initialize FastAPI
 app = FastAPI(title="Society Social Hub API")
+handler = Mangum(app)
 
 # Admin client is now imported from app.supabase_client
 
@@ -24,13 +26,17 @@ async def startup():
     jwt_secret = os.getenv('SUPABASE_JWT_SECRET', '')
     if not jwt_secret or len(jwt_secret) < 32:
         print('WARNING: JWT Secret looks too short or is missing')
-        print(f'DEBUG: Length is {len(jwt_secret)}')
     else:
         print(f'Secret Loaded: {len(jwt_secret)} chars')
 
-    async with engine.begin() as conn:
-        # We assume tables exist in Supabase
-        pass
+    try:
+        async with engine.begin() as conn:
+            # We assume tables exist in Supabase
+            print("INFO: Database connection verified.")
+            pass
+    except Exception as e:
+        print(f"CRITICAL WARNING: Database connection failed during startup: {str(e)}")
+        print("INFO: Continuing startup in 'Degraded Mode'. API will be alive but DB features will fail.")
 
 app.add_middleware(
     CORSMiddleware,
