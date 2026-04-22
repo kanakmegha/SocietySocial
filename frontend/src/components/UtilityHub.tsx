@@ -15,12 +15,12 @@ export default function UtilityHub() {
     window.addEventListener('online', setOnline);
     window.addEventListener('offline', setOffline);
 
-    fetch('http://localhost:8000/contacts')
+    fetch('/api/contacts')
       .then(res => res.json())
       .then(data => setContacts(data))
       .catch(() => console.log('Contacts loading from cache if available'));
 
-    fetch('http://localhost:8000/notices')
+    fetch('/api/notices')
       .then(res => res.json())
       .then(data => setNotices(data))
       .catch(() => console.log('Notices loading from cache if available'));

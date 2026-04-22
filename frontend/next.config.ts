@@ -18,7 +18,7 @@ const withPWA = require("next-pwa")({
       },
     },
     {
-      urlPattern: /^http:\/\/127\.0\.0\.1:8000\/(contacts|notices)/,
+      urlPattern: /^\/api\/(contacts|notices)/,
       handler: "StaleWhileRevalidate",
       options: {
         cacheName: "society-offline-data",
@@ -31,12 +31,14 @@ const withPWA = require("next-pwa")({
   ],
 });
 
+const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
         source: "/api/:path*",
-        destination: "http://127.0.0.1:8000/:path*",
+        destination: `${apiBase}/:path*`,
       },
     ];
   },
