@@ -11,6 +11,7 @@ import asyncio
 import json
 import os
 from datetime import datetime
+from typing import List, Optional
 from mangum import Mangum
 
 # Initialize FastAPI
