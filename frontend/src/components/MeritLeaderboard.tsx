@@ -13,7 +13,7 @@ export default function MeritLeaderboard() {
   const [message, setMessage] = useState('');
 
   const fetchStaff = () => {
-    fetch('http://localhost:8000/staff')
+    fetch('/api/staff')
       .then(res => res.json())
       .then(data => setStaff(data));
   };
@@ -23,7 +23,7 @@ export default function MeritLeaderboard() {
   }, []);
 
   const handleRate = async () => {
-    const res = await fetch('http://localhost:8000/rate', {
+    const res = await fetch('/api/rate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

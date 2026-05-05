@@ -10,12 +10,14 @@ export default function GroupsAndEvents() {
   const [requestedGroups, setRequestedGroups] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    fetch('http://localhost:8000/groups')
+    fetch('/api/groups')
       .then(res => res.json())
       .then(data => setGroups(data));
 
     // Connect to WebSocket for event_1
-    const ws = new WebSocket('ws://localhost:8000/ws/events/evt_1');
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const wsUrl = apiBase.replace('http', 'ws') + '/ws/events/evt_1';
+    const ws = new WebSocket(wsUrl);
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       setRsvpEvent(data);

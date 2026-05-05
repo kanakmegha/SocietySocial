@@ -11,7 +11,7 @@ import { useSupabaseRealtime } from '@/hooks/useSupabase';
 import { useAppContext } from '../layout';
 
 const fetchFeed = async ({ pageParam = 1 }) => {
-  const res = await fetch(`http://localhost:8000/feed?page=${pageParam}&page_size=10`);
+  const res = await fetch(`/api/feed?page=${pageParam}&page_size=10`);
   if (!res.ok) throw new Error('Network response was not ok');
   return res.json();
 };
@@ -74,7 +74,7 @@ export default function FeedPage() {
         const { error } = await supabase.auth.signInWithOtp({
           email: emailInput.trim(),
           options: {
-            emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/feed` : 'http://localhost:3000/feed',
+            emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/feed` : undefined,
           },
         });
         if (error) {
